@@ -1,6 +1,4 @@
-# react-native-mail-oauth
-
-# Only Android
+# react-native-mail-oauth | Only Android
 
 ## Getting started
 
