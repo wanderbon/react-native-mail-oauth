@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Looper;
 import android.os.Handler;
+import android.util.Log;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
@@ -26,15 +27,13 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     }
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        if (!MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise))) {
-            this.onActivityResult(requestCode, resultCode, data);
-        }
+        Log.i("ON_RESULT_4", data + "");
+        MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise))) {
-            this.onActivityResult(requestCode, resultCode, data);
-        }
+        Log.i("ON_RESULT_3", data + "");
+        MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise));
     }
 
     public void onNewIntent(Intent intent) {
