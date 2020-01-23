@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.facebook.react.bridge.Promise;
 
+import ru.mail.auth.sdk.AuthResult;
 import ru.mail.auth.sdk.MailRuCallback;
 
 class SDKResultCallback implements MailRuCallback {
@@ -15,7 +16,9 @@ class SDKResultCallback implements MailRuCallback {
 
     @Override
     public void onResult(Object o) {
-        Log.i("ON_RESULT_RESULT", o + "");
+        AuthResult authResult = (AuthResult) o;
+        Log.i("ON_RESULT_RESULT", authResult.getCodeVerifier());
+        Log.i("ON_RESULT_RESULT", authResult.getAuthCode());
 //        this.resultPromise.resolve(o);
     }
 

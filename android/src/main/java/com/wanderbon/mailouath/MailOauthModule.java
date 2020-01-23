@@ -30,13 +30,16 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
         try {
             MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise));
         } catch (Throwable trow) {
-            Log.i("ON_RESULT_4", trow + "");
+            onActivityResult(requestCode, resultCode, data);
         }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("ON_RESULT_3", data + "");
-        MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise));
+        try {
+            MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise));
+        } catch (Throwable throwable) {
+            this.resultPromise.reject(throwable);
+        }
     }
 
     public void onNewIntent(Intent intent) {
