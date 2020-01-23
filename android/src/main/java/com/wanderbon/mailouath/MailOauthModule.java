@@ -3,17 +3,13 @@ package com.wanderbon.mailouath;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Looper;
-import android.support.annotation.MainThread;
+import android.os.Handler;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.queue.MessageQueueThreadImpl;
-
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import ru.mail.auth.sdk.MailRuAuthSdk;
 
@@ -21,23 +17,12 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
 
     private ReactApplicationContext reactContext;
     private Promise resultPromise;
-    private MessageQueueThreadImpl nativeModulesThread;
-    private Handler mainHandler;
 
     public MailOauthModule(final ReactApplicationContext reactContext) {
         super(reactContext);
         reactContext.addActivityEventListener(this);
 
         this.reactContext = reactContext;
-
-        if(this.getCurrentActivity() != null) {
-            this.getCurrentActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    MailRuAuthSdk.initialize(reactContext);
-                }
-            });
-        }
     }
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
@@ -65,5 +50,18 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     public void logIn(final Promise promise) {
         this.resultPromise = promise;
         MailRuAuthSdk.getInstance().startLogin(this.getCurrentActivity());
+    }
+
+    @ReactMethod
+    public void init() {
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                MailRuAuthSdk.initialize(reactContext);
+            }
+        };
+
+        uiHandler.post(runnable);
     }
 }
