@@ -2,9 +2,9 @@ package com.wanderbon.mailouath;
 
 import com.facebook.react.bridge.Promise;
 
-import ru.mail.auth.sdk.AuthResult;
 import ru.mail.auth.sdk.MailRuAuthSdk;
 import ru.mail.auth.sdk.MailRuCallback;
+import ru.mail.auth.sdk.api.token.OAuthTokensResult;
 
 class SDKResultCallback implements MailRuCallback {
     private Promise resultPromise;
@@ -15,9 +15,9 @@ class SDKResultCallback implements MailRuCallback {
 
     @Override
     public void onResult(Object objectResult) {
-        AuthResult authResult = (AuthResult) objectResult;
+        OAuthTokensResult oAuthTokensResult = (OAuthTokensResult) objectResult;
 
-        MailRuAuthSdk.getInstance().requestOAuthTokens(authResult, new SDKUserInfoCallBack(resultPromise, authResult));
+        MailRuAuthSdk.getInstance().requestUserInfo(oAuthTokensResult, new SDKUserInfoCallBack(resultPromise, oAuthTokensResult));
     }
 
     @Override
