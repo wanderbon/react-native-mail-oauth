@@ -51,6 +51,7 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     @ReactMethod
     public void logIn(final Promise promise) {
         this.resultPromise = promise;
+        Log.i("ON_RESULT_LOGIN", this.getCurrentActivity() + "");
         MailRuAuthSdk.getInstance().startLogin(this.getCurrentActivity());
     }
 
