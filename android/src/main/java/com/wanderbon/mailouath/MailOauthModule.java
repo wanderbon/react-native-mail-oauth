@@ -2,6 +2,7 @@ package com.wanderbon.mailouath;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.MainThread;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
@@ -41,6 +42,11 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     @Override
     public String getName() {
         return "MailOauth";
+    }
+
+    @MainThread@ReactMethod
+    public void init() {
+
     }
 
     @ReactMethod
