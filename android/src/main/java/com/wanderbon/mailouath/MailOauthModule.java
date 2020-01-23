@@ -2,6 +2,7 @@ package com.wanderbon.mailouath;
 
 import android.content.Intent;
 
+import com.facebook.common.activitylistener.ActivityListener;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -22,6 +23,13 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise))) {
+            this.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public String getName() {
         return "MailOauth";
     }
@@ -35,12 +43,5 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     public void logIn(final Promise promise) {
         this.resultPromise = promise;
         MailRuAuthSdk.getInstance().startLogin(this.getCurrentActivity());
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise))) {
-            this.onActivityResult(requestCode, resultCode, data);
-        }
     }
 }
