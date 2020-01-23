@@ -32,7 +32,7 @@ public class MailUserInfoCallback implements MailRuCallback {
         userInfoMap.putString("avatarUrl", userInfo.getAvatarUrl());
         userInfoMap.putString("email", userInfo.getEmail());
         userInfoMap.putString("mailID", userInfo.getMailID());
-
+        
         WritableMap result = Arguments.createMap();
 
         result.putString("accessToken", oAuthTokensResult.getAccessToken());
