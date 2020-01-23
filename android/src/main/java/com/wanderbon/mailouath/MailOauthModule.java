@@ -2,6 +2,7 @@ package com.wanderbon.mailouath;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.annotation.MainThread;
 
 import com.facebook.react.bridge.ActivityEventListener;
@@ -11,6 +12,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.queue.MessageQueueThreadImpl;
 
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
 import ru.mail.auth.sdk.MailRuAuthSdk;
 
 public class MailOauthModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -18,12 +22,20 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
     private ReactApplicationContext reactContext;
     private Promise resultPromise;
     private MessageQueueThreadImpl nativeModulesThread;
+    private Handler mainHandler;
 
-    public MailOauthModule(ReactApplicationContext reactContext) {
+    public MailOauthModule(final ReactApplicationContext reactContext) {
         super(reactContext);
-        nativeModulesThread = (MessageQueueThreadImpl) reactContext.getCatalystInstance().getReactQueueConfiguration().getNativeModulesQueueThread();
         reactContext.addActivityEventListener(this);
+
         this.reactContext = reactContext;
+
+        this.getCurrentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MailRuAuthSdk.initialize(reactContext);
+            }
+        });
     }
 
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
@@ -47,31 +59,9 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
         return "MailOauth";
     }
 
-    @MainThread@ReactMethod
-    public void init() {
-        dispatchInAppropriateThread(new Runnable() {
-            @Override
-            public void run() {
-                MailRuAuthSdk.initialize(reactContext);
-            }
-        });
-    }
-
     @ReactMethod
     public void logIn(final Promise promise) {
         this.resultPromise = promise;
         MailRuAuthSdk.getInstance().startLogin(this.getCurrentActivity());
-    }
-
-    protected void dispatchInAppropriateThread(Runnable runnable) {
-        if (runnable == null) {
-            return;
-        }
-
-        if (nativeModulesThread.getLooper().getThread().isAlive()) {
-            this.reactContext.runOnNativeModulesQueueThread(runnable);
-        } else {
-            this.reactContext.runOnUiQueueThread(runnable);
-        }
     }
 }
