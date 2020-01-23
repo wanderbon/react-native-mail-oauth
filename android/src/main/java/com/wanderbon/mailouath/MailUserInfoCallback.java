@@ -6,16 +6,19 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 
+import ru.mail.auth.sdk.AuthResult;
 import ru.mail.auth.sdk.MailRuCallback;
 import ru.mail.auth.sdk.api.token.OAuthTokensResult;
 import ru.mail.auth.sdk.api.user.UserInfoResult;
 
-public class SDKUserInfoCallBack implements MailRuCallback {
+public class MailUserInfoCallback implements MailRuCallback {
     private Promise resultPromise;
+    private AuthResult authResult;
     private OAuthTokensResult oAuthTokensResult;
 
-    public SDKUserInfoCallBack(Promise resultPromise, OAuthTokensResult oAuthTokensResult) {
+    public MailUserInfoCallback(Promise resultPromise, AuthResult authResult, OAuthTokensResult oAuthTokensResult) {
         this.resultPromise = resultPromise;
+        this.authResult = authResult;
         this.oAuthTokensResult = oAuthTokensResult;
     }
 
@@ -29,6 +32,8 @@ public class SDKUserInfoCallBack implements MailRuCallback {
         WritableMap result = Arguments.createMap();
 
         result.putString("accessToken", oAuthTokensResult.getAccessToken());
+        result.putString("authCode", authResult.getAuthCode());
+        result.putString("codeVerifer", authResult.getCodeVerifier());
 
         this.resultPromise.resolve(result);
     }

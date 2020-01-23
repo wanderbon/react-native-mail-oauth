@@ -1,26 +1,26 @@
 package com.wanderbon.mailouath;
 
-import android.util.Log;
-
 import com.facebook.react.bridge.Promise;
 
+import ru.mail.auth.sdk.AuthResult;
 import ru.mail.auth.sdk.MailRuAuthSdk;
 import ru.mail.auth.sdk.MailRuCallback;
 import ru.mail.auth.sdk.api.token.OAuthTokensResult;
 
-class SDKResultCallback implements MailRuCallback {
+public class MailTokensCallback implements MailRuCallback {
     private Promise resultPromise;
+    private AuthResult authResult;
 
-    public SDKResultCallback(Promise promise) {
-        this.resultPromise = promise;
+    public MailTokensCallback(Promise resultPromise, AuthResult authResult) {
+        this.resultPromise = resultPromise;
+        this.authResult = authResult;
     }
 
     @Override
     public void onResult(Object objectResult) {
-        Log.i("USER_INFO", objectResult + "");
         OAuthTokensResult oAuthTokensResult = (OAuthTokensResult) objectResult;
 
-        MailRuAuthSdk.getInstance().requestUserInfo(oAuthTokensResult, new SDKUserInfoCallBack(resultPromise, oAuthTokensResult));
+        MailRuAuthSdk.getInstance().requestUserInfo(oAuthTokensResult, new MailUserInfoCallback(resultPromise, authResult, oAuthTokensResult));
     }
 
     @Override
