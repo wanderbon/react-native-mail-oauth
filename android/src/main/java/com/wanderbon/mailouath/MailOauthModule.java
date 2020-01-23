@@ -22,7 +22,6 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
         this.reactContext = reactContext;
     }
 
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise))) {
             this.onActivityResult(requestCode, resultCode, data);
