@@ -21,6 +21,7 @@ public class SDKUserInfoCallBack implements MailRuCallback {
 
     @Override
     public void onResult(Object objectResult) {
+        Log.i("USER_INFO", objectResult + "");
         UserInfoResult userInfo = (UserInfoResult) objectResult;
 
         Log.i("USER_INFO", userInfo.getName());
