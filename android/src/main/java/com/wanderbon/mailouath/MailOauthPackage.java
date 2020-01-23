@@ -16,7 +16,6 @@ public class MailOauthPackage implements ReactPackage {
         return Arrays.<NativeModule>asList(new MailOauthModule(reactContext));
     }
 
-    @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
     }
