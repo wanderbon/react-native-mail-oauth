@@ -1,7 +1,5 @@
 package com.wanderbon.mailouath;
 
-import android.util.Log;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
@@ -32,7 +30,7 @@ public class MailUserInfoCallback implements MailRuCallback {
         userInfoMap.putString("avatarUrl", userInfo.getAvatarUrl());
         userInfoMap.putString("email", userInfo.getEmail());
         userInfoMap.putString("mailID", userInfo.getMailID());
-        
+
         WritableMap result = Arguments.createMap();
 
         result.putString("accessToken", oAuthTokensResult.getAccessToken());
