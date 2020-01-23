@@ -1,5 +1,6 @@
 package com.wanderbon.mailouath;
 
+import android.app.Activity;
 import android.content.Intent;
 
 import com.facebook.common.activitylistener.ActivityListener;
@@ -20,6 +21,12 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
         super(reactContext);
         reactContext.addActivityEventListener(this);
         this.reactContext = reactContext;
+    }
+
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        if (!MailRuAuthSdk.getInstance().handleActivityResult(requestCode, resultCode, data, new SDKResultCallback(this.resultPromise))) {
+            this.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
