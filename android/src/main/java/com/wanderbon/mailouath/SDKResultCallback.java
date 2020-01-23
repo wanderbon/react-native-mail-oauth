@@ -2,6 +2,7 @@ package com.wanderbon.mailouath;
 
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 
@@ -18,10 +19,8 @@ class SDKResultCallback implements MailRuCallback {
     @Override
     public void onResult(Object o) {
         AuthResult authResult = (AuthResult) o;
-        Log.i("ON_RESULT_RESULT", authResult.getCodeVerifier());
-        Log.i("ON_RESULT_RESULT", authResult.getAuthCode());
 
-        WritableMap result = null;
+        WritableMap result = Arguments.createMap();
         result.putString("codeVerifier", authResult.getCodeVerifier());
         result.putString("authCode", authResult.getAuthCode());
         this.resultPromise.resolve(result);
