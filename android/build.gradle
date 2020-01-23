@@ -51,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    implementation ('ru.mail:auth-sdk-pub:10.7.0.27801')
+    implementation ('ru.mail:auth-sdk-pub:11.3.0.28240')
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
 

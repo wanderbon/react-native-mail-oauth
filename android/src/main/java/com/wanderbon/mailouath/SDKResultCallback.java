@@ -20,6 +20,7 @@ class SDKResultCallback implements MailRuCallback {
         AuthResult authResult = (AuthResult) o;
 
         WritableMap result = Arguments.createMap();
+
         result.putString("codeVerifier", authResult.getCodeVerifier());
         result.putString("authCode", authResult.getAuthCode());
         
