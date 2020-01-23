@@ -1,5 +1,7 @@
 # react-native-mail-oauth
 
+# Only Android
+
 ## Getting started
 
 `$ npm install react-native-mail-oauth --save`
