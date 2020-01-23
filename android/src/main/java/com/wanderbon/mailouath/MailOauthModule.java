@@ -9,6 +9,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.queue.MessageQueueThreadImpl;
 
 import ru.mail.auth.sdk.MailRuAuthSdk;
 
@@ -16,9 +17,11 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
 
     private ReactApplicationContext reactContext;
     private Promise resultPromise;
+    private MessageQueueThreadImpl nativeModulesThread;
 
     public MailOauthModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        nativeModulesThread = (MessageQueueThreadImpl) reactContext.getCatalystInstance().getReactQueueConfiguration().getNativeModulesQueueThread();
         reactContext.addActivityEventListener(this);
         this.reactContext = reactContext;
     }
@@ -46,12 +49,29 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
 
     @MainThread@ReactMethod
     public void init() {
-        MailRuAuthSdk.initialize(this.reactContext);
+        dispatchInAppropriateThread(new Runnable() {
+            @Override
+            public void run() {
+                MailRuAuthSdk.initialize(reactContext);
+            }
+        });
     }
 
     @ReactMethod
     public void logIn(final Promise promise) {
         this.resultPromise = promise;
         MailRuAuthSdk.getInstance().startLogin(this.getCurrentActivity());
+    }
+
+    protected void dispatchInAppropriateThread(Runnable runnable) {
+        if (runnable == null) {
+            return;
+        }
+
+        if (nativeModulesThread.getLooper().getThread().isAlive()) {
+            this.reactContext.runOnNativeModulesQueueThread(runnable);
+        } else {
+            this.reactContext.runOnUiQueueThread(runnable);
+        }
     }
 }
