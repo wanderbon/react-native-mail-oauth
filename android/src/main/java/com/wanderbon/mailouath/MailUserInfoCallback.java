@@ -24,16 +24,21 @@ public class MailUserInfoCallback implements MailRuCallback {
 
     @Override
     public void onResult(Object objectResult) {
-        Log.i("USER_INFO", objectResult + "");
         UserInfoResult userInfo = (UserInfoResult) objectResult;
 
-        Log.i("USER_INFO", userInfo.getName());
+        WritableMap userInfoMap = Arguments.createMap();
+
+        userInfoMap.putString("name", userInfo.getName());
+        userInfoMap.putString("avatarUrl", userInfo.getAvatarUrl());
+        userInfoMap.putString("email", userInfo.getEmail());
+        userInfoMap.putString("mailID", userInfo.getMailID());
 
         WritableMap result = Arguments.createMap();
 
         result.putString("accessToken", oAuthTokensResult.getAccessToken());
         result.putString("authCode", authResult.getAuthCode());
         result.putString("codeVerifer", authResult.getCodeVerifier());
+        result.putMap("user", userInfoMap);
 
         this.resultPromise.resolve(result);
     }
