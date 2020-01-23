@@ -46,7 +46,7 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
 
     @MainThread@ReactMethod
     public void init() {
-
+        MailRuAuthSdk.initialize(this.reactContext);
     }
 
     @ReactMethod
