@@ -29,6 +29,10 @@ public class MailOauthModule extends ReactContextBaseJavaModule implements Activ
         }
     }
 
+    public void onNewIntent(Intent intent) {
+
+    }
+
     @Override
     public String getName() {
         return "MailOauth";
